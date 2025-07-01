@@ -5,8 +5,9 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ServiceCard from '../../components/ServiceCard.astro';
 import { getServices } from '../../lib/cosmic';
+import type { ServiceObject } from '../../types';
 
-const services = await getServices();
+const services = await getServices() as ServiceObject[];
 ---
 
 <Layout 
@@ -35,7 +36,7 @@ const services = await getServices();
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {services.length > 0 ? (
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
+            {services.map((service: ServiceObject) => (
               <ServiceCard service={service} />
             ))}
           </div>

@@ -1,3 +1,4 @@
+// src/lib/cosmic.ts
 import { createBucketClient } from '@cosmicjs/sdk';
 
 const cosmic = createBucketClient({
@@ -9,6 +10,11 @@ const cosmic = createBucketClient({
 
 export { cosmic };
 
+// Type guard to check if error has status property
+function isCosmicError(error: unknown): error is { status: number } {
+  return typeof error === 'object' && error !== null && 'status' in error;
+}
+
 // Utility functions for data fetching
 export async function getServices() {
   try {
@@ -18,7 +24,7 @@ export async function getServices() {
       .depth(1);
     return response.objects;
   } catch (error) {
-    if (error.status === 404) {
+    if (isCosmicError(error) && error.status === 404) {
       return [];
     }
     throw new Error('Failed to fetch services');
@@ -33,7 +39,7 @@ export async function getTeamMembers() {
       .depth(1);
     return response.objects;
   } catch (error) {
-    if (error.status === 404) {
+    if (isCosmicError(error) && error.status === 404) {
       return [];
     }
     throw new Error('Failed to fetch team members');
@@ -48,7 +54,7 @@ export async function getCaseStudies() {
       .depth(1);
     return response.objects;
   } catch (error) {
-    if (error.status === 404) {
+    if (isCosmicError(error) && error.status === 404) {
       return [];
     }
     throw new Error('Failed to fetch case studies');
@@ -63,7 +69,7 @@ export async function getTestimonials() {
       .depth(1);
     return response.objects;
   } catch (error) {
-    if (error.status === 404) {
+    if (isCosmicError(error) && error.status === 404) {
       return [];
     }
     throw new Error('Failed to fetch testimonials');
@@ -81,7 +87,7 @@ export async function getFeaturedTestimonials() {
       .depth(1);
     return response.objects;
   } catch (error) {
-    if (error.status === 404) {
+    if (isCosmicError(error) && error.status === 404) {
       return [];
     }
     throw new Error('Failed to fetch featured testimonials');

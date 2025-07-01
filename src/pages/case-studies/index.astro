@@ -4,8 +4,9 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getCaseStudies } from '../../lib/cosmic';
+import type { CaseStudyObject, ServiceObject } from '../../types';
 
-const caseStudies = await getCaseStudies();
+const caseStudies = await getCaseStudies() as CaseStudyObject[];
 ---
 
 <Layout 
@@ -34,7 +35,7 @@ const caseStudies = await getCaseStudies();
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {caseStudies.length > 0 ? (
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {caseStudies.map((study) => (
+            {caseStudies.map((study: CaseStudyObject) => (
               <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 {study.metadata?.featured_image && (
                   <img 
@@ -72,7 +73,7 @@ const caseStudies = await getCaseStudies();
                   <div class="flex items-center justify-between">
                     <div class="flex flex-wrap gap-2">
                       {study.metadata?.services_used && study.metadata.services_used.length > 0 && (
-                        study.metadata.services_used.slice(0, 2).map((service: any) => (
+                        study.metadata.services_used.slice(0, 2).map((service: ServiceObject) => (
                           <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
                             {service.metadata?.service_name || service.title}
                           </span>

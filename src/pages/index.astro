@@ -6,12 +6,13 @@ import Footer from '../components/Footer.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import { getServices, getFeaturedTestimonials, getCaseStudies, getTeamMembers } from '../lib/cosmic';
+import type { ServiceObject, TestimonialObject, CaseStudyObject, TeamMemberObject } from '../types';
 
 // Fetch data at build time
-const services = await getServices();
-const featuredTestimonials = await getFeaturedTestimonials();
-const caseStudies = await getCaseStudies();
-const teamMembers = await getTeamMembers();
+const services = await getServices() as ServiceObject[];
+const featuredTestimonials = await getFeaturedTestimonials() as TestimonialObject[];
+const caseStudies = await getCaseStudies() as CaseStudyObject[];
+const teamMembers = await getTeamMembers() as TeamMemberObject[];
 
 // Get featured case study for hero
 const featuredCaseStudy = caseStudies[0];
@@ -63,7 +64,7 @@ const featuredCaseStudy = caseStudies[0];
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => (
+          {services.map((service: ServiceObject) => (
             <ServiceCard service={service} />
           ))}
         </div>
@@ -135,7 +136,7 @@ const featuredCaseStudy = caseStudies[0];
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.slice(0, 3).map((member) => (
+            {teamMembers.slice(0, 3).map((member: TeamMemberObject) => (
               <div class="bg-white rounded-lg shadow-md p-6 text-center">
                 {member.metadata?.profile_photo && (
                   <img 
@@ -189,7 +190,7 @@ const featuredCaseStudy = caseStudies[0];
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {featuredTestimonials.map((testimonial) => (
+            {featuredTestimonials.map((testimonial: TestimonialObject) => (
               <TestimonialCard testimonial={testimonial} />
             ))}
           </div>

@@ -4,8 +4,9 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getTeamMembers } from '../../lib/cosmic';
+import type { TeamMemberObject } from '../../types';
 
-const teamMembers = await getTeamMembers();
+const teamMembers = await getTeamMembers() as TeamMemberObject[];
 ---
 
 <Layout 
@@ -34,7 +35,7 @@ const teamMembers = await getTeamMembers();
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {teamMembers.length > 0 ? (
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member) => (
+            {teamMembers.map((member: TeamMemberObject) => (
               <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 {member.metadata?.profile_photo && (
                   <img 
