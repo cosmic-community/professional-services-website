@@ -92,6 +92,12 @@ export interface Testimonial extends CosmicObject {
   };
 }
 
+// Export type aliases to match import expectations
+export type ServiceObject = Service;
+export type TeamMemberObject = TeamMember;
+export type CaseStudyObject = CaseStudy;
+export type TestimonialObject = Testimonial;
+
 // API response types
 export interface CosmicResponse<T> {
   objects: T[];
