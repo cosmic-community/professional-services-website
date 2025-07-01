@@ -1,0 +1,135 @@
+---
+// src/pages/case-studies/index.astro
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCaseStudies } from '../../lib/cosmic';
+
+const caseStudies = await getCaseStudies();
+---
+
+<Layout 
+  title="Case Studies - Success Stories & Project Results"
+  description="Explore our case studies and see how we've helped businesses achieve remarkable results through our web development, marketing, and consulting services."
+>
+  <Header />
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            Case Studies
+          </h1>
+          <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+            Real results for real businesses. See how we've helped companies transform and grow.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Studies Grid -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {caseStudies.length > 0 ? (
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {caseStudies.map((study) => (
+              <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                {study.metadata?.featured_image && (
+                  <img 
+                    src={`${study.metadata.featured_image.imgix_url}?w=1200&h=600&fit=crop&auto=format,compress`}
+                    alt={study.metadata?.project_title || study.title}
+                    width="600"
+                    height="300"
+                    class="w-full h-48 object-cover"
+                  />
+                )}
+                <div class="p-6">
+                  <div class="flex items-center justify-between mb-3">
+                    {study.metadata?.client_name && (
+                      <span class="text-sm text-primary-600 font-medium">
+                        {study.metadata.client_name}
+                      </span>
+                    )}
+                    {study.metadata?.industry && (
+                      <span class="text-sm text-gray-500">
+                        {study.metadata.industry}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <h2 class="text-xl font-semibold text-gray-900 mb-3">
+                    {study.metadata?.project_title || study.title}
+                  </h2>
+                  
+                  {study.metadata?.project_overview && (
+                    <p class="text-gray-600 mb-4 line-clamp-3">
+                      {study.metadata.project_overview}
+                    </p>
+                  )}
+                  
+                  <div class="flex items-center justify-between">
+                    <div class="flex flex-wrap gap-2">
+                      {study.metadata?.services_used && study.metadata.services_used.length > 0 && (
+                        study.metadata.services_used.slice(0, 2).map((service: any) => (
+                          <span class="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                            {service.metadata?.service_name || service.title}
+                          </span>
+                        ))
+                      )}
+                    </div>
+                    {study.metadata?.project_duration && (
+                      <span class="text-sm text-gray-500">
+                        {study.metadata.project_duration}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div class="mt-4">
+                    <a 
+                      href={`/case-studies/${study.slug}`}
+                      class="inline-block bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition-colors"
+                    >
+                      Read Full Case Study
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">
+              Case Studies Coming Soon
+            </h2>
+            <p class="text-gray-600">
+              We're currently preparing detailed case studies. Please check back soon!
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">
+          Ready to Create Your Success Story?
+        </h2>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          Let's work together to achieve the kind of results featured in our case studies. 
+          Your success story could be next.
+        </p>
+        <a 
+          href="/contact" 
+          class="inline-block bg-primary-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-primary-700 transition-colors"
+        >
+          Start Your Project
+        </a>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>

@@ -1,0 +1,60 @@
+---
+// src/components/ServiceCard.astro
+import type { Service } from '../types';
+
+export interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+  {service.metadata?.service_icon && (
+    <div class="mb-4">
+      <img 
+        src={`${service.metadata.service_icon.imgix_url}?w=80&h=80&fit=crop&auto=format,compress`}
+        alt={service.metadata?.service_name || service.title}
+        width="40"
+        height="40"
+        class="w-10 h-10 object-cover rounded"
+      />
+    </div>
+  )}
+  
+  <h3 class="text-xl font-semibold text-gray-900 mb-3">
+    {service.metadata?.service_name || service.title}
+  </h3>
+  
+  {service.metadata?.short_description && (
+    <p class="text-gray-600 mb-4 line-clamp-3">
+      {service.metadata.short_description}
+    </p>
+  )}
+  
+  {service.metadata?.starting_price && (
+    <p class="text-primary-600 font-semibold mb-4">
+      {service.metadata.starting_price}
+    </p>
+  )}
+  
+  {service.metadata?.key_features && service.metadata.key_features.length > 0 && (
+    <ul class="text-sm text-gray-600 space-y-1 mb-4">
+      {service.metadata.key_features.slice(0, 3).map((feature: string) => (
+        <li class="flex items-center">
+          <svg class="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+          {feature}
+        </li>
+      ))}
+    </ul>
+  )}
+  
+  <a 
+    href={`/services/${service.slug}`}
+    class="inline-block bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition-colors"
+  >
+    Learn More
+  </a>
+</div>

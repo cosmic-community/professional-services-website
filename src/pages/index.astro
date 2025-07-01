@@ -1,0 +1,220 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import { getServices, getFeaturedTestimonials, getCaseStudies, getTeamMembers } from '../lib/cosmic';
+
+// Fetch data at build time
+const services = await getServices();
+const featuredTestimonials = await getFeaturedTestimonials();
+const caseStudies = await getCaseStudies();
+const teamMembers = await getTeamMembers();
+
+// Get featured case study for hero
+const featuredCaseStudy = caseStudies[0];
+---
+
+<Layout title="Professional Services - Web Development, Marketing & Consulting">
+  <Header />
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-6xl font-bold mb-6">
+            Transform Your Business with Expert Solutions
+          </h1>
+          <p class="text-xl md:text-2xl mb-8 text-primary-100 max-w-3xl mx-auto">
+            We help companies thrive in the digital age with comprehensive web development, 
+            digital marketing, and business consulting services.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href="/services" 
+              class="bg-white text-primary-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Our Services
+            </a>
+            <a 
+              href="/contact" 
+              class="border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:text-primary-600 transition-colors"
+            >
+              Get Started
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Our Services
+          </h2>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            We offer comprehensive solutions to help your business succeed in today's competitive market.
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service) => (
+            <ServiceCard service={service} />
+          ))}
+        </div>
+        
+        {services.length > 0 && (
+          <div class="text-center mt-12">
+            <a 
+              href="/services" 
+              class="inline-block bg-primary-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-primary-700 transition-colors"
+            >
+              View All Services
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Featured Case Study -->
+    {featuredCaseStudy && (
+      <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                Success Stories
+              </h2>
+              <h3 class="text-2xl font-semibold text-primary-600 mb-4">
+                {featuredCaseStudy.metadata?.project_title || featuredCaseStudy.title}
+              </h3>
+              {featuredCaseStudy.metadata?.project_overview && (
+                <p class="text-lg text-gray-600 mb-6">
+                  {featuredCaseStudy.metadata.project_overview}
+                </p>
+              )}
+              <a 
+                href={`/case-studies/${featuredCaseStudy.slug}`}
+                class="inline-block bg-primary-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-primary-700 transition-colors"
+              >
+                Read Case Study
+              </a>
+            </div>
+            <div>
+              {featuredCaseStudy.metadata?.featured_image && (
+                <img 
+                  src={`${featuredCaseStudy.metadata.featured_image.imgix_url}?w=1200&h=800&fit=crop&auto=format,compress`}
+                  alt={featuredCaseStudy.metadata?.project_title || featuredCaseStudy.title}
+                  width="600"
+                  height="400"
+                  class="w-full h-80 object-cover rounded-lg shadow-md"
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Team Preview -->
+    {teamMembers.length > 0 && (
+      <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Meet Our Team
+            </h2>
+            <p class="text-xl text-gray-600">
+              Experienced professionals dedicated to your success
+            </p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {teamMembers.slice(0, 3).map((member) => (
+              <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                {member.metadata?.profile_photo && (
+                  <img 
+                    src={`${member.metadata.profile_photo.imgix_url}?w=300&h=300&fit=crop&auto=format,compress`}
+                    alt={member.metadata?.full_name || member.title}
+                    width="150"
+                    height="150"
+                    class="w-24 h-24 rounded-full object-cover mx-auto mb-4"
+                  />
+                )}
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                  {member.metadata?.full_name || member.title}
+                </h3>
+                {member.metadata?.job_title && (
+                  <p class="text-primary-600 font-medium mb-3">
+                    {member.metadata.job_title}
+                  </p>
+                )}
+                {member.metadata?.years_experience && (
+                  <p class="text-sm text-gray-600">
+                    {member.metadata.years_experience} years experience
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <div class="text-center mt-12">
+            <a 
+              href="/team" 
+              class="inline-block bg-primary-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-primary-700 transition-colors"
+            >
+              Meet the Full Team
+            </a>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Testimonials -->
+    {featuredTestimonials.length > 0 && (
+      <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              What Our Clients Say
+            </h2>
+            <p class="text-xl text-gray-600">
+              Don't just take our word for it
+            </p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {featuredTestimonials.map((testimonial) => (
+              <TestimonialCard testimonial={testimonial} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA Section -->
+    <section class="bg-primary-600 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          Ready to Transform Your Business?
+        </h2>
+        <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">
+          Let's discuss how we can help you achieve your goals with our expert solutions.
+        </p>
+        <a 
+          href="/contact" 
+          class="inline-block bg-white text-primary-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Get Started Today
+        </a>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>

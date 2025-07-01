@@ -1,0 +1,76 @@
+---
+// src/pages/services/index.astro
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import { getServices } from '../../lib/cosmic';
+
+const services = await getServices();
+---
+
+<Layout 
+  title="Our Services - Professional Web Development, Marketing & Consulting"
+  description="Comprehensive digital services including web development, digital marketing, and business consulting to help your business grow and succeed."
+>
+  <Header />
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            Our Services
+          </h1>
+          <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+            Comprehensive solutions to help your business thrive in the digital age
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Grid -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {services.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service) => (
+              <ServiceCard service={service} />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">
+              Services Coming Soon
+            </h2>
+            <p class="text-gray-600">
+              We're currently updating our services. Please check back soon!
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">
+          Need a Custom Solution?
+        </h2>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          We understand that every business is unique. Let's discuss your specific needs 
+          and create a tailored solution that drives results.
+        </p>
+        <a 
+          href="/contact" 
+          class="inline-block bg-primary-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-primary-700 transition-colors"
+        >
+          Contact Us
+        </a>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</Layout>
